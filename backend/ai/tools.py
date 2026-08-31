@@ -1,5 +1,5 @@
 from typing import Dict, Any, List
-from ..database import db
+from database import db
 
 def get_payment(payment_id: str) -> Dict[str, Any]:
     if not db: return {}

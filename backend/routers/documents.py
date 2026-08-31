@@ -1,8 +1,8 @@
 import os
 from fastapi import APIRouter, HTTPException
 from fastapi.responses import FileResponse
-from ..database import db
-from ..services.pdf_generator import generate_dispute_response_pdf
+from database import db
+from services.pdf_generator import generate_dispute_response_pdf
 
 router = APIRouter()
 
@@ -14,8 +14,17 @@ def generate_pdf(investigation_id: str):
     if not db:
         raise HTTPException(status_code=500, detail="Database not configured")
         
-    # Fetch investigation
-    inv_resp = db.table("investigations").select("*, disputes(*)").eq("id", investigation_id).execute()
+    # Fetch investigation with retry for transient SSL drops
+    for _ in range(3):
+        try:
+            inv_resp = db.table("investigations").select("*, disputes(*)").eq("id", investigation_id).execute()
+            break
+        except Exception:
+            import time
+            time.sleep(0.5)
+    else:
+        raise HTTPException(status_code=500, detail="Database connection failed")
+        
     if not inv_resp.data:
         raise HTTPException(status_code=404, detail="Investigation not found")
     
@@ -25,8 +34,17 @@ def generate_pdf(investigation_id: str):
     if investigation.get("status") != "COMPLETED":
         raise HTTPException(status_code=400, detail="Investigation must be completed to generate PDF")
         
-    # Fetch evidence
-    ev_resp = db.table("evidence").select("*").eq("investigation_id", investigation_id).execute()
+    # Fetch evidence with retry
+    for _ in range(3):
+        try:
+            ev_resp = db.table("evidence").select("*").eq("investigation_id", investigation_id).execute()
+            break
+        except Exception:
+            import time
+            time.sleep(0.5)
+    else:
+        raise HTTPException(status_code=500, detail="Database connection failed")
+        
     evidence_claims = ev_resp.data
     
     # Ensure a directory exists for outputs

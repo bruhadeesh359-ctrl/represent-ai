@@ -1,10 +1,10 @@
 import datetime
 from fastapi import APIRouter, HTTPException
 from typing import Dict, Any
-from ..database import db
-from ..ai.tools import get_payment, get_order_by_payment, get_shipping, get_customer_messages
-from ..ai.gemini_client import analyze_dispute_context
-from ..ai.validator import validate_evidence
+from database import db
+from ai.tools import get_payment, get_order_by_payment, get_shipping, get_customer_messages
+from ai.gemini_client import analyze_dispute_context
+from ai.validator import validate_evidence
 
 router = APIRouter()
 

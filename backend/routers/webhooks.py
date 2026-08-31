@@ -2,8 +2,8 @@ import os
 import uuid
 from fastapi import APIRouter, Request, HTTPException, BackgroundTasks
 from typing import Dict, Any
-from ..database import db
-from ..services.razorpay.client import verify_webhook_signature
+from database import db
+from services.razorpay.client import verify_webhook_signature
 
 router = APIRouter()
 
