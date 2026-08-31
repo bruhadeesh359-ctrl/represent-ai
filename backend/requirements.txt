@@ -8,3 +8,4 @@ razorpay
 reportlab
 pytest
 pypdf
+requests

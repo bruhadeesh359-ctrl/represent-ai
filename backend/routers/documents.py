@@ -3,6 +3,7 @@ from fastapi import APIRouter, HTTPException
 from fastapi.responses import FileResponse
 from database import db
 from services.pdf_generator import generate_dispute_response_pdf
+from services.razorpay.client import upload_document, contest_dispute
 
 router = APIRouter()
 
@@ -67,22 +68,48 @@ def download_pdf(investigation_id: str):
 @router.post("/{investigation_id}/submit")
 def submit_to_razorpay(investigation_id: str):
     """
-    Simulated endpoint for merchant approval and Razorpay submission.
+    Live endpoint for merchant approval and Razorpay submission.
     """
     if not db:
         raise HTTPException(status_code=500, detail="Database not configured")
         
-    # Audit log
-    db.table("audit_logs").insert({
-        "investigation_id": investigation_id,
-        "action": "Merchant Approved and Submitted to Razorpay",
-        "details": {"method": "mock_simulation"}
-    }).execute()
-    
-    # Update dispute status to under_review
-    inv_resp = db.table("investigations").select("dispute_id").eq("id", investigation_id).execute()
-    if inv_resp.data:
-        dispute_id = inv_resp.data[0]["dispute_id"]
-        db.table("disputes").update({"status": "under_review"}).eq("id", dispute_id).execute()
+    # Fetch investigation and dispute details
+    inv_resp = db.table("investigations").select("*, disputes(*)").eq("id", investigation_id).execute()
+    if not inv_resp.data:
+        raise HTTPException(status_code=404, detail="Investigation not found")
         
-    return {"message": "Dispute response submitted successfully"}
+    investigation = inv_resp.data[0]
+    dispute = investigation.get("disputes")
+    if not dispute:
+        raise HTTPException(status_code=404, detail="Dispute not found")
+        
+    pdf_path = f"generated_pdfs/{investigation_id}.pdf"
+    if not os.path.exists(pdf_path):
+        raise HTTPException(status_code=400, detail="Evidence PDF must be generated before submission")
+        
+    try:
+        # 1. Upload Document to Razorpay
+        document_id = upload_document(pdf_path)
+        
+        # 2. Contest Dispute on Razorpay
+        contest_resp = contest_dispute(
+            dispute_id=dispute.get("razorpay_dispute_id"),
+            amount=dispute.get("amount"),
+            summary=investigation.get("reasoning_summary", "Contesting dispute with evidence attached."),
+            document_ids=[document_id]
+        )
+        
+        # 3. Audit log
+        db.table("audit_logs").insert({
+            "investigation_id": investigation_id,
+            "action": "Merchant Approved and Submitted to Live Razorpay API",
+            "details": {"document_id": document_id, "razorpay_response": contest_resp}
+        }).execute()
+        
+        # 4. Update dispute status to under_review
+        db.table("disputes").update({"status": "under_review"}).eq("id", dispute.get("id")).execute()
+        
+        return {"message": "Dispute response submitted successfully to Razorpay", "document_id": document_id}
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to submit to Razorpay API: {str(e)}")
