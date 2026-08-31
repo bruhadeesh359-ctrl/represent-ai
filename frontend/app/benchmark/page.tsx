@@ -1,93 +1,144 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { api } from "@/lib/api";
+import { getBenchmarks } from "@/lib/api";
 
 export default function Benchmark() {
-  const [stats, setStats] = useState<any>(null);
+  const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // In a real app we would have a dedicated endpoint for this.
-    // For demo purposes, we will fetch disputes and calculate client side.
-    api.get("/api/disputes")
-      .then(res => {
-        const disputes = res.data;
-        const investigations = disputes
-          .filter((d: any) => d.investigations && d.investigations.length > 0)
-          .map((d: any) => d.investigations[0]);
-          
-        const completed = investigations.filter((i: any) => i.status === 'COMPLETED');
-        
-        let correct = 0;
-        let humanReview = 0;
-        
-        completed.forEach((inv: any) => {
-          if (inv.decision === inv.ground_truth_decision) {
-            correct++;
-          }
-          if (inv.decision === 'HUMAN_REVIEW') {
-            humanReview++;
-          }
-        });
-        
-        const accuracy = completed.length > 0 ? (correct / completed.length) * 100 : 0;
-        
-        setStats({
-          totalCases: disputes.length,
-          investigatedCases: completed.length,
-          accuracy: accuracy.toFixed(1),
-          humanReviewRate: completed.length > 0 ? ((humanReview / completed.length) * 100).toFixed(1) : 0,
-          evidenceGrounding: '100', // Enforced by deterministic validator
-          unsupportedClaims: 0 // Enforced by deterministic validator
-        });
-      })
+    getBenchmarks()
+      .then(setData)
       .catch(console.error)
       .finally(() => setLoading(false));
   }, []);
 
-  if (loading) return <div className="p-10 animate-pulse">Calculating benchmarks...</div>;
+  if (loading) {
+    return <div className="p-10 font-label-md text-label-md text-on-surface-variant">Calculating benchmarks...</div>;
+  }
+
+  const metrics = data?.metrics || {
+    total_cases: 0,
+    accuracy: 0,
+    evidence_grounding: 0,
+    hallucinations: 0,
+    review_rate: 0
+  };
+
+  const matrix = data?.confusion_matrix || [];
 
   return (
-    <div className="p-10 max-w-4xl mx-auto">
-      <header className="mb-10">
-        <h1 className="text-3xl font-bold text-slate-900 mb-2">System Benchmark</h1>
-        <p className="text-slate-500">Performance on synthetic adversarial dataset.</p>
-      </header>
-      
-      <div className="grid grid-cols-2 gap-6">
-        <div className="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm text-center">
-           <h3 className="text-slate-500 font-medium mb-2">Decision Accuracy</h3>
-           <div className="text-6xl font-black text-blue-600">{stats?.accuracy}%</div>
-           <p className="text-sm text-slate-400 mt-2">Against Ground Truth</p>
+    <>
+      {/* Page Header */}
+      <div className="mb-stack-lg">
+        <h2 className="font-headline-lg text-headline-lg font-semibold text-primary">Evaluation & Benchmarks</h2>
+        <p className="font-body-lg text-body-lg text-on-surface-variant mt-1">Measuring AI accuracy, grounding, and deterministic validation performance.</p>
+      </div>
+
+      <div className="grid grid-cols-1 xl:grid-cols-12 gap-gutter">
+        {/* KPI Grid */}
+        <div className="xl:col-span-12 grid grid-cols-2 md:grid-cols-5 gap-stack-md mb-gutter">
+          <div className="bg-surface-container-lowest border border-surface-variant rounded-lg p-stack-md flex flex-col justify-between relative overflow-hidden">
+            <div className="absolute inset-0 bg-secondary/5 opacity-50 z-0"></div>
+            <span className="font-label-sm text-label-sm text-on-surface-variant uppercase z-10">Test Cases</span>
+            <div className="font-display-lg text-display-lg text-primary mt-stack-sm z-10">{metrics.total_cases}</div>
+          </div>
+
+          <div className="bg-surface-container-lowest border border-surface-variant rounded-lg p-stack-md flex flex-col justify-between relative overflow-hidden">
+            <span className="font-label-sm text-label-sm text-on-surface-variant uppercase z-10">Decision Accuracy</span>
+            <div className="font-display-lg text-display-lg text-primary mt-stack-sm z-10 flex items-baseline gap-1">
+              {metrics.accuracy}<span className="font-headline-md text-headline-md text-outline">%</span>
+            </div>
+          </div>
+
+          <div className="bg-surface-container-lowest border border-surface-variant rounded-lg p-stack-md flex flex-col justify-between relative overflow-hidden">
+            <span className="font-label-sm text-label-sm text-on-surface-variant uppercase z-10">Evidence Grounding</span>
+            <div className="font-display-lg text-display-lg text-[#16a34a] mt-stack-sm z-10 flex items-baseline gap-1">
+              {metrics.evidence_grounding}<span className="font-headline-md text-headline-md text-outline">%</span>
+            </div>
+          </div>
+
+          <div className="bg-surface-container-lowest border border-surface-variant rounded-lg p-stack-md flex flex-col justify-between relative overflow-hidden">
+            <span className="font-label-sm text-label-sm text-on-surface-variant uppercase z-10">Hallucinated Claims</span>
+            <div className="font-display-lg text-display-lg text-primary mt-stack-sm z-10">{metrics.hallucinations}</div>
+          </div>
+
+          <div className="bg-surface-container-lowest border border-surface-variant rounded-lg p-stack-md flex flex-col justify-between relative overflow-hidden">
+            <span className="font-label-sm text-label-sm text-on-surface-variant uppercase z-10">Human Review Rate</span>
+            <div className="font-display-lg text-display-lg text-primary mt-stack-sm z-10 flex items-baseline gap-1">
+              {metrics.review_rate}<span className="font-headline-md text-headline-md text-outline">%</span>
+            </div>
+          </div>
         </div>
-        
-        <div className="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm text-center">
-           <h3 className="text-slate-500 font-medium mb-2">Evidence Grounding</h3>
-           <div className="text-6xl font-black text-green-600">{stats?.evidenceGrounding}%</div>
-           <p className="text-sm text-slate-400 mt-2">Zero Hallucinations</p>
+
+        {/* Decision Matrix (Confusion Matrix) */}
+        <div className="xl:col-span-8 bg-surface-container-lowest border border-surface-variant rounded-lg p-stack-lg">
+          <div className="flex items-center justify-between mb-stack-md">
+            <h3 className="font-title-lg text-title-lg text-primary">Decision Matrix</h3>
+            <span className="font-label-sm text-label-sm text-outline px-2 py-1 bg-surface-container rounded">Predicted vs Actual</span>
+          </div>
+          
+          <div className="overflow-x-auto">
+            <table className="w-full text-left border-collapse">
+              <thead>
+                <tr>
+                  <th className="p-3 border-b border-surface-variant bg-surface-container-low font-label-md text-label-md text-on-surface-variant w-1/4"></th>
+                  <th className="p-3 border-b border-surface-variant bg-surface-container-low font-label-md text-label-md text-on-surface-variant text-center border-l border-surface-variant">Predicted: FIGHT</th>
+                  <th className="p-3 border-b border-surface-variant bg-surface-container-low font-label-md text-label-md text-on-surface-variant text-center border-l border-surface-variant">Predicted: ACCEPT</th>
+                  <th className="p-3 border-b border-surface-variant bg-surface-container-low font-label-md text-label-md text-on-surface-variant text-center border-l border-surface-variant">Predicted: REVIEW</th>
+                </tr>
+              </thead>
+              <tbody className="font-body-md text-body-md">
+                {matrix.map((row: any, idx: number) => (
+                  <tr key={idx} className="border-b border-surface-variant hover:bg-surface-bright transition-colors">
+                    <td className="p-3 font-label-md text-label-md text-on-surface-variant bg-surface-container-low border-r border-surface-variant">
+                      Actual: {row.actual.replace('_', ' ')}
+                    </td>
+                    <td className={`p-3 text-center border-l border-surface-variant ${row.actual === 'FIGHT' ? 'bg-[#dbe1ff]/30 font-bold text-primary' : 'text-outline'}`}>
+                      {row.predicted_fight}
+                    </td>
+                    <td className={`p-3 text-center border-l border-surface-variant ${row.actual === 'ACCEPT' ? 'bg-[#dbe1ff]/30 font-bold text-primary' : 'text-outline'}`}>
+                      {row.predicted_accept}
+                    </td>
+                    <td className={`p-3 text-center border-l border-surface-variant ${row.actual === 'HUMAN_REVIEW' ? 'bg-[#dbe1ff]/30 font-bold text-primary' : 'text-outline'}`}>
+                      {row.predicted_review}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
-        
-        <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
-           <h3 className="text-slate-500 font-medium mb-1">Human Review Rate</h3>
-           <div className="text-3xl font-bold text-slate-900">{stats?.humanReviewRate}%</div>
-        </div>
-        
-        <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
-           <h3 className="text-slate-500 font-medium mb-1">Unsupported Claims</h3>
-           <div className="text-3xl font-bold text-slate-900">{stats?.unsupportedClaims}</div>
-        </div>
-        
-        <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
-           <h3 className="text-slate-500 font-medium mb-1">Total Cases</h3>
-           <div className="text-3xl font-bold text-slate-900">{stats?.totalCases}</div>
-        </div>
-        
-        <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
-           <h3 className="text-slate-500 font-medium mb-1">Investigated Cases</h3>
-           <div className="text-3xl font-bold text-slate-900">{stats?.investigatedCases}</div>
+
+        {/* Grounding Audit */}
+        <div className="xl:col-span-4 flex flex-col gap-gutter">
+          <div className="bg-surface-container-lowest border border-surface-variant rounded-lg p-stack-lg flex-1">
+            <div className="flex items-center gap-inline-sm mb-stack-md">
+              <span className="material-symbols-outlined text-primary">policy</span>
+              <h3 className="font-title-lg text-title-lg text-primary">Grounding Audit</h3>
+            </div>
+            
+            <div className="space-y-stack-md">
+              <div className="p-stack-sm border border-surface-variant rounded bg-surface-bright flex gap-inline-sm items-start">
+                <span className="material-symbols-outlined text-[#16a34a] mt-0.5">check_circle</span>
+                <div>
+                  <p className="font-body-md text-body-md text-primary font-semibold">{metrics.evidence_grounding}% Mapping Success</p>
+                  <p className="font-body-sm text-body-sm text-on-surface-variant mt-1">{metrics.evidence_grounding}% of AI claims successfully mapped to source data.</p>
+                </div>
+              </div>
+              
+              <div className="p-stack-sm border border-surface-variant rounded bg-surface-bright flex gap-inline-sm items-start">
+                <span className="material-symbols-outlined text-primary mt-0.5">verified_user</span>
+                <div>
+                  <p className="font-body-md text-body-md text-primary font-semibold">{metrics.hallucinations} Rejected Claims</p>
+                  <p className="font-body-sm text-body-sm text-on-surface-variant mt-1">{metrics.hallucinations} claims rejected due to lack of evidence.</p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }

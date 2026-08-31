@@ -26,7 +26,19 @@ export const generatePdf = async (investigationId: string) => {
   return res.data;
 };
 
+export const downloadPdf = async (investigationId: string) => {
+  const res = await api.get(`/api/documents/${investigationId}/download-pdf`, {
+    responseType: 'blob',
+  });
+  return res.data;
+};
+
 export const submitResponse = async (investigationId: string) => {
   const res = await api.post(`/api/documents/${investigationId}/submit`);
+  return res.data;
+};
+
+export const getBenchmarks = async () => {
+  const res = await api.get('/api/benchmarks');
   return res.data;
 };

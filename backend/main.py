@@ -19,7 +19,7 @@ app.add_middleware(
 def read_root():
     return {"message": "RepresentAI API is running."}
 
-from routers import mock_apis, webhooks, documents, disputes
+from routers import mock_apis, webhooks, documents, disputes, benchmarks
 from workflows import investigation
 
 app.include_router(mock_apis.router, prefix="/mock", tags=["mock"])
@@ -27,6 +27,7 @@ app.include_router(webhooks.router, prefix="/webhooks", tags=["webhooks"])
 app.include_router(disputes.router, prefix="/api/disputes", tags=["disputes"])
 app.include_router(investigation.router, prefix="/api/investigations", tags=["investigations"])
 app.include_router(documents.router, prefix="/api/documents", tags=["documents"])
+app.include_router(benchmarks.router, prefix="/api/benchmarks", tags=["benchmarks"])
 
 
 

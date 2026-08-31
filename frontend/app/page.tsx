@@ -1,90 +1,48 @@
-"use client";
-
-import { useEffect, useState } from "react";
+import { LandingNavbar } from "@/components/landing/Navbar";
+import { Hero } from "@/components/landing/Hero";
+import { TrustStrip, ProblemSection } from "@/components/landing/ProblemSection";
+import { HowItWorks, EvidenceValidation } from "@/components/landing/HowItWorks";
+import { DecisionSection, BenchmarkSection } from "@/components/landing/DecisionSection";
+import { ProductPreview, PdfSection, SecuritySection, Footer } from "@/components/landing/ExtraSections";
 import Link from "next/link";
-import { getDisputes } from "@/lib/api";
-import { formatDistanceToNow } from "date-fns";
 
-export default function Dashboard() {
-  const [disputes, setDisputes] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    getDisputes()
-      .then(setDisputes)
-      .catch(console.error)
-      .finally(() => setLoading(false));
-  }, []);
-
+export default function LandingPage() {
   return (
-    <div className="p-10 max-w-6xl mx-auto">
-      <header className="flex justify-between items-end mb-10">
-        <div>
-          <h1 className="text-3xl font-bold text-slate-900 mb-2">Disputes</h1>
-          <p className="text-slate-500">Manage and investigate chargebacks.</p>
-        </div>
-        <button 
-          onClick={() => alert("Simulation triggered (Endpoint integration pending)")}
-          className="bg-slate-900 text-white px-5 py-2.5 rounded-lg font-medium hover:bg-slate-800 transition shadow-sm"
-        >
-          ▶ Run Demo
-        </button>
-      </header>
+    <div className="min-h-screen bg-background font-sans selection:bg-primary/30 text-on-surface scroll-smooth">
+      <LandingNavbar />
+      
+      <main>
+        <Hero />
+        <TrustStrip />
+        <ProblemSection />
+        <HowItWorks />
+        <EvidenceValidation />
+        <DecisionSection />
+        <ProductPreview />
+        <BenchmarkSection />
+        <PdfSection />
+        <SecuritySection />
 
-      {loading ? (
-        <div className="animate-pulse space-y-4">
-          {[1, 2, 3].map(i => (
-            <div key={i} className="h-24 bg-slate-200 rounded-xl"></div>
-          ))}
-        </div>
-      ) : disputes.length === 0 ? (
-        <div className="text-center py-20 bg-white rounded-2xl border border-slate-200 shadow-sm">
-          <p className="text-slate-500">No active disputes.</p>
-        </div>
-      ) : (
-        <div className="grid gap-4">
-          {disputes.map((dispute) => {
-            const hasInvestigation = dispute.investigations && dispute.investigations.length > 0;
-            const investigationStatus = hasInvestigation ? dispute.investigations[0].status : null;
-            
-            return (
-              <Link key={dispute.id} href={`/disputes/${dispute.id}`}>
-                <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow group cursor-pointer flex items-center justify-between">
-                  <div className="flex items-center gap-6">
-                    <div className="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center text-red-600 font-bold shrink-0">
-                      🔴
-                    </div>
-                    <div>
-                      <h3 className="text-lg font-bold text-slate-900 mb-1">{dispute.razorpay_dispute_id}</h3>
-                      <div className="flex gap-4 text-sm text-slate-500">
-                        <span>₹{(dispute.amount / 100).toLocaleString()}</span>
-                        <span>•</span>
-                        <span className="capitalize">{dispute.reason_code.replace(/_/g, ' ')}</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center gap-6">
-                    <div className="text-right">
-                      <p className="text-sm font-medium text-slate-900">
-                        {investigationStatus === 'COMPLETED' ? 'Investigation Complete' : 
-                         investigationStatus === 'IN_PROGRESS' ? 'Investigating...' : 'Requires Action'}
-                      </p>
-                      <p className="text-xs text-slate-500">
-                        Respond by {dispute.respond_by ? formatDistanceToNow(new Date(dispute.respond_by)) : 'Unknown'}
-                      </p>
-                    </div>
-                    
-                    <button className="bg-blue-50 text-blue-700 px-4 py-2 rounded-lg font-semibold group-hover:bg-blue-600 group-hover:text-white transition-colors">
-                      {investigationStatus === 'COMPLETED' ? 'View Result' : 'Investigate'}
-                    </button>
-                  </div>
-                </div>
+        {/* Final CTA */}
+        <section className="py-32 bg-primary-container relative overflow-hidden text-center">
+          <div className="absolute inset-0 bg-primary/5 pattern-grid-lg"></div>
+          <div className="max-w-4xl mx-auto px-6 md:px-12 relative z-10">
+            <h2 className="font-display-lg text-[40px] md:text-[56px] font-bold text-on-primary-container leading-[1.1] mb-8">
+              Turn dispute investigation from manual work into an evidence-driven workflow.
+            </h2>
+            <div className="flex flex-wrap items-center justify-center gap-4">
+              <Link href="/login" className="bg-primary text-on-primary px-8 py-4 rounded font-label-lg text-label-lg hover:bg-primary/90 transition-colors shadow-lg hover:shadow-primary/20">
+                Open RepresentAI
               </Link>
-            )
-          })}
-        </div>
-      )}
+              <Link href="#product" className="bg-surface-container-lowest text-on-surface px-8 py-4 rounded border border-outline-variant font-label-lg text-label-lg hover:bg-surface-container-low transition-colors shadow-sm">
+                Explore the Investigation
+              </Link>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <Footer />
     </div>
   );
 }

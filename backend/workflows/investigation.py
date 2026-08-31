@@ -57,38 +57,44 @@ def run_investigation(dispute_id: str):
         "messages": messages
     }
     
-    ai_result = analyze_dispute_context(
-        dispute=dispute,
-        payment=payment,
-        order=order,
-        shipping=shipping,
-        messages=messages
-    )
-    
-    if not ai_result:
-        db.table("investigations").update({"status": "FAILED"}).eq("id", investigation_id).execute()
-        raise HTTPException(status_code=500, detail="AI analysis failed")
+    try:
+        ai_result = analyze_dispute_context(
+            dispute=dispute,
+            payment=payment,
+            order=order,
+            shipping=shipping,
+            messages=messages
+        )
         
-    # 4. Deterministic Validation
-    validated_result = validate_evidence(ai_result, raw_context)
-    
-    # 5. Save Results
-    db.table("investigations").update({
-        "status": "COMPLETED",
-        "decision": validated_result.decision,
-        "confidence": validated_result.confidence,
-        "reasoning_summary": validated_result.summary,
-        "completed_at": datetime.datetime.now(datetime.timezone.utc).isoformat()
-    }).eq("id", investigation_id).execute()
+        if not ai_result:
+            db.table("investigations").update({"status": "FAILED"}).eq("id", investigation_id).execute()
+            raise HTTPException(status_code=500, detail="AI analysis returned None (check API key)")
+            
+        # 4. Deterministic Validation
+        validated_result = validate_evidence(ai_result, raw_context)
+        
+        # 5. Save Results
+        db.table("investigations").update({
+            "status": "COMPLETED",
+            "decision": validated_result.decision,
+            "confidence": validated_result.confidence,
+            "reasoning_summary": validated_result.summary,
+            "completed_at": datetime.datetime.now(datetime.timezone.utc).isoformat()
+        }).eq("id", investigation_id).execute()
+        
+    except Exception as e:
+        db.table("investigations").update({"status": "FAILED"}).eq("id", investigation_id).execute()
+        raise HTTPException(status_code=500, detail=f"Investigation failed: {str(e)}")
     
     # Clear old evidence if re-running
     db.table("evidence").delete().eq("investigation_id", investigation_id).execute()
     
+    import uuid
     # Save Evidence Claims
     evidence_inserts = []
     for ev in validated_result.supporting_evidence + validated_result.contradicting_evidence:
         evidence_inserts.append({
-            "id": ev.evidence_id,
+            "id": str(uuid.uuid4()),
             "investigation_id": investigation_id,
             "source": ev.source,
             "evidence_type": ev.evidence_type,

@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>RepresentAI - Investigation Command Center</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary-container": "#fefcff",
+                        "on-tertiary": "#ffffff",
+                        "error": "#ba1a1a",
+                        "on-tertiary-container": "#75859d",
+                        "outline": "#76777d",
+                        "surface-bright": "#f7f9fb",
+                        "outline-variant": "#c6c6cd",
+                        "inverse-on-surface": "#eff1f3",
+                        "surface-tint": "#565e74",
+                        "tertiary-fixed": "#d3e4fe",
+                        "on-surface-variant": "#45464d",
+                        "on-surface": "#191c1e",
+                        "error-container": "#ffdad6",
+                        "primary-fixed-dim": "#bec6e0",
+                        "surface-variant": "#e0e3e5",
+                        "on-primary-container": "#7c839b",
+                        "surface-container-low": "#f2f4f6",
+                        "surface-container-lowest": "#ffffff",
+                        "on-background": "#191c1e",
+                        "primary-fixed": "#dae2fd",
+                        "surface": "#f7f9fb",
+                        "tertiary": "#000000",
+                        "inverse-primary": "#bec6e0",
+                        "on-secondary-fixed": "#00174b",
+                        "surface-container-high": "#e6e8ea",
+                        "background": "#f7f9fb",
+                        "secondary-fixed": "#dbe1ff",
+                        "on-error-container": "#93000a",
+                        "surface-dim": "#d8dadc",
+                        "secondary": "#0051d5",
+                        "surface-container": "#eceef0",
+                        "on-primary": "#ffffff",
+                        "secondary-fixed-dim": "#b4c5ff",
+                        "surface-container-highest": "#e0e3e5",
+                        "tertiary-fixed-dim": "#b7c8e1",
+                        "primary": "#000000",
+                        "tertiary-container": "#0b1c30",
+                        "inverse-surface": "#2d3133",
+                        "on-tertiary-fixed": "#0b1c30",
+                        "on-error": "#ffffff",
+                        "primary-container": "#131b2e",
+                        "on-tertiary-fixed-variant": "#38485d",
+                        "on-primary-fixed-variant": "#3f465c",
+                        "on-secondary": "#ffffff",
+                        "on-secondary-fixed-variant": "#003ea8",
+                        "secondary-container": "#316bf3",
+                        "on-primary-fixed": "#131b2e"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "container-margin": "32px",
+                        "base": "4px",
+                        "stack-md": "16px",
+                        "stack-sm": "8px",
+                        "inline-sm": "12px",
+                        "gutter": "24px",
+                        "stack-lg": "24px",
+                        "inline-xs": "4px"
+                    },
+                    "fontFamily": {
+                        "body-sm": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "label-md": ["JetBrains Mono"],
+                        "label-sm": ["JetBrains Mono"],
+                        "body-lg": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "title-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-sm": ["12px", { "lineHeight": "18px", "fontWeight": "400" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500" }],
+                        "label-sm": ["10px", { "lineHeight": "14px", "letterSpacing": "0.05em", "fontWeight": "500" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "title-lg": ["20px", { "lineHeight": "28px", "fontWeight": "600" }]
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background text-on-surface font-body-md h-screen flex overflow-hidden">
+<!-- SideNavBar (Shared Component) -->
+<nav class="bg-surface-container-lowest dark:bg-primary-container border-r border-outline-variant dark:border-primary fixed left-0 top-0 h-full w-64 flex flex-col py-container-margin px-inline-sm z-50">
+<!-- Brand -->
+<div class="mb-stack-lg px-inline-sm">
+<h1 class="font-headline-md text-headline-md font-bold text-on-surface dark:text-on-primary-fixed">RepresentAI</h1>
+<p class="font-label-sm text-label-sm text-on-surface-variant dark:text-on-primary-container uppercase">Fintech Intelligence</p>
+</div>
+<!-- Navigation Links -->
+<div class="flex-1 flex flex-col gap-stack-sm">
+<a class="flex items-center gap-inline-sm px-inline-sm py-stack-sm rounded hover:bg-surface-container-high dark:hover:bg-primary-fixed-variant transition-colors text-on-surface-variant dark:text-on-primary-container" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-body-md text-body-md">Overview</span>
+</a>
+<a class="flex items-center gap-inline-sm px-inline-sm py-stack-sm rounded hover:bg-surface-container-high dark:hover:bg-primary-fixed-variant transition-colors text-on-surface-variant dark:text-on-primary-container" href="#">
+<span class="material-symbols-outlined" data-icon="gavel">gavel</span>
+<span class="font-body-md text-body-md">Disputes</span>
+</a>
+<a class="flex items-center gap-inline-sm px-inline-sm py-stack-sm rounded hover:bg-surface-container-high dark:hover:bg-primary-fixed-variant transition-colors text-secondary dark:text-secondary-fixed-dim font-bold active:scale-[0.98] transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="troubleshoot" style="font-variation-settings: 'FILL' 1;">troubleshoot</span>
+<span class="font-body-md text-body-md">Investigations</span>
+</a>
+<a class="flex items-center gap-inline-sm px-inline-sm py-stack-sm rounded hover:bg-surface-container-high dark:hover:bg-primary-fixed-variant transition-colors text-on-surface-variant dark:text-on-primary-container" href="#">
+<span class="material-symbols-outlined" data-icon="description">description</span>
+<span class="font-body-md text-body-md">Evidence</span>
+</a>
+<a class="flex items-center gap-inline-sm px-inline-sm py-stack-sm rounded hover:bg-surface-container-high dark:hover:bg-primary-fixed-variant transition-colors text-on-surface-variant dark:text-on-primary-container" href="#">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+<span class="font-body-md text-body-md">Benchmarks</span>
+</a>
+<a class="flex items-center gap-inline-sm px-inline-sm py-stack-sm rounded hover:bg-surface-container-high dark:hover:bg-primary-fixed-variant transition-colors text-on-surface-variant dark:text-on-primary-container mt-auto" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-body-md text-body-md">Settings</span>
+</a>
+</div>
+<!-- Footer Integrations -->
+<div class="mt-stack-lg pt-stack-md border-t border-surface-variant dark:border-primary-fixed-dim">
+<div class="flex items-center gap-inline-sm px-inline-sm py-stack-sm text-on-surface-variant dark:text-on-primary-container opacity-80">
+<span class="material-symbols-outlined text-[16px]" data-icon="api">api</span>
+<span class="font-label-sm text-label-sm">API: Online</span>
+</div>
+<div class="flex items-center gap-inline-sm px-inline-sm py-stack-sm text-on-surface-variant dark:text-on-primary-container opacity-80">
+<span class="material-symbols-outlined text-[16px]" data-icon="bolt">bolt</span>
+<span class="font-label-sm text-label-sm">Gemini: Active</span>
+</div>
+<div class="flex items-center gap-inline-sm px-inline-sm py-stack-sm text-on-surface-variant dark:text-on-primary-container opacity-80">
+<span class="material-symbols-outlined text-[16px]" data-icon="account_balance_wallet">account_balance_wallet</span>
+<span class="font-label-sm text-label-sm">Razorpay: Connected</span>
+</div>
+</div>
+</nav>
+<!-- Main Content Area -->
+<div class="flex-1 ml-64 flex flex-col h-full overflow-hidden">
+<!-- TopNavBar (Shared Component) -->
+<header class="bg-surface dark:bg-background border-b border-outline-variant dark:border-primary docked full-width top-0 sticky z-40 flat no shadows flex justify-between items-center h-16 w-full px-container-margin">
+<!-- TopNavBar Header Typography Anchor & Nav structure injected by flex layout -->
+<div class="flex items-center gap-gutter h-full">
+<div class="flex items-center gap-stack-md h-full">
+<a class="h-full flex items-center text-outline dark:text-on-primary-container hover:text-primary dark:hover:text-primary-fixed transition-colors font-label-md text-label-md px-inline-sm" href="#">Disputes</a>
+<a class="h-full flex items-center text-primary dark:text-primary-fixed border-b-2 border-primary opacity-80 font-label-md text-label-md px-inline-sm" href="#">Investigations</a>
+</div>
+</div>
+<div class="flex items-center gap-stack-lg">
+<div class="font-label-md text-label-md text-on-surface-variant dark:text-on-primary-container bg-surface-container-high px-inline-sm py-stack-sm rounded uppercase tracking-widest text-[10px]">DEMO ENVIRONMENT</div>
+<button class="text-outline dark:text-on-primary-container hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="text-outline dark:text-on-primary-container hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="help_outline">help_outline</span>
+</button>
+<div class="w-8 h-8 rounded-full bg-surface-variant border border-outline-variant overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A professional headshot of an executive in a high-key modern office setting with bright white lighting and a clean tech aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAMwOB1L3Z8v4W9aDgm0kUUN21eG82RC65iybzGSmiJ4s4MI82JwUleQvSuJfut6eZmNvm1VtZ-gMjyb09PZR0z1LQ82Ld0jltMR2hEgjOx9EA7dK3C1CZAbHs3NoCqHpvvCdkKYkNDCqmU21ipQShyR6OZ8_uxdJ9la7MtqaFvK1dIGMsektBBdLBP2UmxobllxqIHF2YqNp7eTUW54OYWOyzuRW34hct_pxgWYoep7Nm1Djdj1PwS"/>
+</div>
+</div>
+</header>
+<!-- Page Content: Investigation Command Center -->
+<main class="flex-1 overflow-y-auto p-container-margin bg-background">
+<!-- Investigation Header -->
+<div class="flex justify-between items-end mb-stack-lg pb-stack-md border-b border-surface-variant">
+<div>
+<div class="flex items-center gap-inline-sm mb-stack-sm">
+<span class="font-label-sm text-label-sm text-on-surface-variant tracking-widest uppercase">Investigation ID:</span>
+<span class="font-label-md text-label-md font-bold text-on-surface">INV-2023-9844A</span>
+</div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface flex items-center gap-inline-sm">
+                        Acme Corp vs. Stripe 
+                        <span class="bg-secondary/10 text-secondary border border-secondary/20 px-inline-sm py-base rounded-full font-label-sm text-label-sm flex items-center gap-base">
+<span class="material-symbols-outlined text-[12px]" data-icon="check_circle">check_circle</span> READY_FOR_REVIEW
+                        </span>
+</h2>
+</div>
+<div class="flex gap-stack-md">
+<button class="flex items-center gap-base px-stack-md py-stack-sm border border-outline-variant rounded bg-surface-container-lowest text-on-surface font-label-md text-label-md hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined text-[16px]" data-icon="download">download</span> DOWNLOAD PDF
+                     </button>
+<button class="flex items-center gap-base px-stack-md py-stack-sm bg-primary text-on-primary rounded font-label-md text-label-md hover:bg-on-surface-variant transition-colors shadow-sm">
+<span class="material-symbols-outlined text-[16px]" data-icon="send">send</span> APPROVE PACKAGE
+                     </button>
+</div>
+</div>
+<!-- Two Column Layout -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+<!-- Left Column: Investigation Sync Timeline -->
+<div class="lg:col-span-4 flex flex-col gap-stack-lg">
+<div class="bg-surface-container-lowest border border-outline-variant rounded p-stack-md">
+<h3 class="font-title-lg text-title-lg mb-stack-lg border-b border-surface-variant pb-stack-sm">Investigation Sync</h3>
+<div class="relative border-l-2 border-surface-variant ml-3 pl-stack-md flex flex-col gap-stack-lg pb-stack-md">
+<!-- Timeline Node 1 -->
+<div class="relative">
+<div class="absolute -left-[27px] w-5 h-5 bg-surface-container-lowest border-2 border-secondary rounded-full flex items-center justify-center">
+<div class="w-2 h-2 bg-secondary rounded-full"></div>
+</div>
+<div class="font-label-md text-label-md font-bold mb-base">Ingest Claim Data</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant">Parsed 14 fields from Stripe dispute webhook.</div>
+<div class="font-label-sm text-label-sm text-outline mt-base">10:42 AM • VERIFIED</div>
+</div>
+<!-- Timeline Node 2 -->
+<div class="relative">
+<div class="absolute -left-[27px] w-5 h-5 bg-surface-container-lowest border-2 border-secondary rounded-full flex items-center justify-center">
+<div class="w-2 h-2 bg-secondary rounded-full"></div>
+</div>
+<div class="font-label-md text-label-md font-bold mb-base">Cross-Reference Logistics</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant">FedEx API query returned delivery confirmation (Signature: J. Doe).</div>
+<div class="font-label-sm text-label-sm text-outline mt-base">10:43 AM • MATCH FOUND</div>
+</div>
+<!-- Timeline Node 3 -->
+<div class="relative">
+<div class="absolute -left-[27px] w-5 h-5 bg-surface-container-lowest border-2 border-secondary rounded-full flex items-center justify-center">
+<div class="w-2 h-2 bg-secondary rounded-full"></div>
+</div>
+<div class="font-label-md text-label-md font-bold mb-base">Analyze Communications</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant">Zendesk ticket #88492 shows customer acknowledging receipt.</div>
+<div class="font-label-sm text-label-sm text-outline mt-base">10:45 AM • HIGH CONFIDENCE</div>
+</div>
+<!-- Timeline Node 4 -->
+<div class="relative">
+<div class="absolute -left-[27px] w-5 h-5 bg-surface-container-lowest border-2 border-secondary rounded-full flex items-center justify-center shadow-[0_0_8px_rgba(37,99,235,0.4)]">
+<div class="w-2 h-2 bg-secondary rounded-full"></div>
+</div>
+<div class="font-label-md text-label-md font-bold mb-base text-secondary">Generate Recommendation</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant">Synthesized evidence into defense payload.</div>
+<div class="font-label-sm text-label-sm text-secondary mt-base">10:46 AM • READY</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: AI Recommendation & Evidence Ledger -->
+<div class="lg:col-span-8 flex flex-col gap-stack-lg">
+<!-- Top Panel: AI RECOMMENDATION -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded p-stack-lg relative overflow-hidden">
+<!-- Subtle background pattern for data density feel -->
+<div class="absolute inset-0 opacity-[0.03] pointer-events-none" style="background-image: radial-gradient(#191c1e 1px, transparent 1px); background-size: 16px 16px;"></div>
+<div class="relative z-10 flex flex-col md:flex-row justify-between gap-stack-lg items-start">
+<div class="flex-1">
+<div class="font-label-sm text-label-sm text-on-surface-variant tracking-widest uppercase mb-stack-sm">AI Recommendation</div>
+<div class="flex items-center gap-stack-md mb-stack-md">
+<h2 class="font-display-lg text-display-lg font-bold text-on-surface tracking-tight">FIGHT</h2>
+<div class="bg-secondary-fixed text-on-secondary-fixed-variant px-stack-md py-stack-sm rounded font-label-md text-label-md flex items-center gap-base">
+<span class="material-symbols-outlined text-[18px]" data-icon="policy">policy</span> 94% Confidence
+                                    </div>
+</div>
+<div class="grid grid-cols-2 gap-stack-md mb-stack-lg max-w-md">
+<div class="border border-surface-variant p-stack-sm rounded bg-surface-bright">
+<div class="font-label-sm text-label-sm text-on-surface-variant mb-base">Evidence Strength</div>
+<div class="font-headline-md text-headline-md text-on-surface">HIGH</div>
+</div>
+<div class="border border-surface-variant p-stack-sm rounded bg-surface-bright">
+<div class="font-label-sm text-label-sm text-on-surface-variant mb-base">Verified Claims</div>
+<div class="font-headline-md text-headline-md text-on-surface">8/8</div>
+</div>
+</div>
+</div>
+<div class="flex-1 border-l border-surface-variant pl-stack-lg">
+<h4 class="font-label-md text-label-md font-bold mb-stack-sm text-on-surface">WHY REPRESENTAI RECOMMENDS FIGHT</h4>
+<ul class="flex flex-col gap-stack-sm font-body-sm text-body-sm text-on-surface-variant list-disc pl-4">
+<li>Carrier delivery confirmation (FedEx) perfectly matches order shipping address and timestamp.</li>
+<li>Customer signature obtained at delivery matches historical signatures on file.</li>
+<li>Zendesk communication log indicates customer explicitly acknowledged receiving the package on Oct 12th.</li>
+<li>No prior dispute history for this customer ID across the network.</li>
+</ul>
+</div>
+</div>
+</div>
+<!-- Bottom Panel: Evidence Ledger -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded overflow-hidden flex flex-col">
+<div class="p-stack-md border-b border-surface-variant bg-surface-bright flex justify-between items-center">
+<h3 class="font-title-lg text-title-lg text-on-surface">Evidence Ledger</h3>
+<span class="font-label-sm text-label-sm text-outline flex items-center gap-base">
+<span class="material-symbols-outlined text-[14px]" data-icon="lock">lock</span> Immutable Record
+                            </span>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead class="bg-surface-container-low font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">
+<tr>
+<th class="p-stack-md font-medium border-b border-surface-variant">Dispute Claim</th>
+<th class="p-stack-md font-medium border-b border-surface-variant">Source Node</th>
+<th class="p-stack-md font-medium border-b border-surface-variant">Evidence Value</th>
+<th class="p-stack-md font-medium border-b border-surface-variant">Integrity State</th>
+</tr>
+</thead>
+<tbody class="font-body-sm text-body-sm text-on-surface">
+<tr class="border-b border-surface-variant hover:bg-surface-bright transition-colors">
+<td class="p-stack-md font-medium">Order was delivered</td>
+<td class="p-stack-md"><span class="bg-surface-variant px-2 py-1 rounded text-[10px] font-label-md">FedEx API</span></td>
+<td class="p-stack-md font-label-sm">STATUS: DELIVERED (Oct 12, 14:32)</td>
+<td class="p-stack-md">
+<span class="text-secondary font-label-sm flex items-center gap-base">
+<span class="material-symbols-outlined text-[14px]" data-icon="check_circle">check_circle</span> VERIFIED
+                                            </span>
+</td>
+</tr>
+<tr class="border-b border-surface-variant hover:bg-surface-bright transition-colors">
+<td class="p-stack-md font-medium">Delivery Address Match</td>
+<td class="p-stack-md"><span class="bg-surface-variant px-2 py-1 rounded text-[10px] font-label-md">Shopify</span></td>
+<td class="p-stack-md font-label-sm">123 Main St, Suite 400, NY 10001</td>
+<td class="p-stack-md">
+<span class="text-secondary font-label-sm flex items-center gap-base">
+<span class="material-symbols-outlined text-[14px]" data-icon="check_circle">check_circle</span> VERIFIED
+                                            </span>
+</td>
+</tr>
+<tr class="border-b border-surface-variant hover:bg-surface-bright transition-colors">
+<td class="p-stack-md font-medium">Customer Acknowledgment</td>
+<td class="p-stack-md"><span class="bg-surface-variant px-2 py-1 rounded text-[10px] font-label-md">Zendesk</span></td>
+<td class="p-stack-md font-label-sm">"Thanks, got the package today." (Ticket #88492)</td>
+<td class="p-stack-md">
+<span class="text-secondary font-label-sm flex items-center gap-base">
+<span class="material-symbols-outlined text-[14px]" data-icon="check_circle">check_circle</span> VERIFIED
+                                            </span>
+</td>
+</tr>
+<tr class="border-b border-surface-variant hover:bg-surface-bright transition-colors">
+<td class="p-stack-md font-medium">Device Fingerprint Match</td>
+<td class="p-stack-md"><span class="bg-surface-variant px-2 py-1 rounded text-[10px] font-label-md">Stripe Radar</span></td>
+<td class="p-stack-md font-label-sm">Device ID matches 5 previous successful orders.</td>
+<td class="p-stack-md">
+<span class="text-secondary font-label-sm flex items-center gap-base">
+<span class="material-symbols-outlined text-[14px]" data-icon="check_circle">check_circle</span> VERIFIED
+                                            </span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

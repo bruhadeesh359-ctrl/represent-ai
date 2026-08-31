@@ -6,3 +6,5 @@ google-generativeai
 python-dotenv
 razorpay
 reportlab
+pytest
+pypdf

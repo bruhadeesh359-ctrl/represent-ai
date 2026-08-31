@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+
+<html class="h-full" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>RepresentAI - Investigation Detail</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-secondary-container": "#fefcff",
+                      "on-tertiary": "#ffffff",
+                      "error": "#ba1a1a",
+                      "on-tertiary-container": "#75859d",
+                      "outline": "#76777d",
+                      "surface-bright": "#f7f9fb",
+                      "outline-variant": "#c6c6cd",
+                      "inverse-on-surface": "#eff1f3",
+                      "surface-tint": "#565e74",
+                      "tertiary-fixed": "#d3e4fe",
+                      "on-surface-variant": "#45464d",
+                      "on-surface": "#191c1e",
+                      "error-container": "#ffdad6",
+                      "primary-fixed-dim": "#bec6e0",
+                      "surface-variant": "#e0e3e5",
+                      "on-primary-container": "#7c839b",
+                      "surface-container-low": "#f2f4f6",
+                      "surface-container-lowest": "#ffffff",
+                      "on-background": "#191c1e",
+                      "primary-fixed": "#dae2fd",
+                      "surface": "#f7f9fb",
+                      "tertiary": "#000000",
+                      "inverse-primary": "#bec6e0",
+                      "on-secondary-fixed": "#00174b",
+                      "surface-container-high": "#e6e8ea",
+                      "background": "#f7f9fb",
+                      "secondary-fixed": "#dbe1ff",
+                      "on-error-container": "#93000a",
+                      "surface-dim": "#d8dadc",
+                      "secondary": "#0051d5",
+                      "surface-container": "#eceef0",
+                      "on-primary": "#ffffff",
+                      "secondary-fixed-dim": "#b4c5ff",
+                      "surface-container-highest": "#e0e3e5",
+                      "tertiary-fixed-dim": "#b7c8e1",
+                      "primary": "#000000",
+                      "tertiary-container": "#0b1c30",
+                      "inverse-surface": "#2d3133",
+                      "on-tertiary-fixed": "#0b1c30",
+                      "on-error": "#ffffff",
+                      "primary-container": "#131b2e",
+                      "on-tertiary-fixed-variant": "#38485d",
+                      "on-primary-fixed-variant": "#3f465c",
+                      "on-secondary": "#ffffff",
+                      "on-secondary-fixed-variant": "#003ea8",
+                      "secondary-container": "#316bf3",
+                      "on-primary-fixed": "#131b2e"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "container-margin": "32px",
+                      "base": "4px",
+                      "stack-md": "16px",
+                      "stack-sm": "8px",
+                      "inline-sm": "12px",
+                      "gutter": "24px",
+                      "stack-lg": "24px",
+                      "inline-xs": "4px"
+              },
+              "fontFamily": {
+                      "body-sm": [
+                              "Inter"
+                      ],
+                      "headline-lg": [
+                              "Inter"
+                      ],
+                      "headline-md": [
+                              "Inter"
+                      ],
+                      "label-md": [
+                              "JetBrains Mono"
+                      ],
+                      "label-sm": [
+                              "JetBrains Mono"
+                      ],
+                      "body-lg": [
+                              "Inter"
+                      ],
+                      "display-lg": [
+                              "Inter"
+                      ],
+                      "body-md": [
+                              "Inter"
+                      ],
+                      "title-lg": [
+                              "Inter"
+                      ]
+              },
+              "fontSize": {
+                      "body-sm": [
+                              "12px",
+                              {
+                                      "lineHeight": "18px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "label-md": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.02em",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "label-sm": [
+                              "10px",
+                              {
+                                      "lineHeight": "14px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "body-lg": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "display-lg": [
+                              "48px",
+                              {
+                                      "lineHeight": "56px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "body-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "title-lg": [
+                              "20px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "600"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<style>
+        .timeline-line {
+            position: absolute;
+            left: 11px;
+            top: 24px;
+            bottom: -8px;
+            width: 2px;
+            background-color: #E2E8F0;
+            z-index: 0;
+        }
+        .timeline-line.active {
+            background-color: #316bf3;
+        }
+        .pulse-ring {
+            animation: pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+        }
+        @keyframes pulse-ring {
+            0% { transform: scale(0.8); opacity: 0.8; }
+            100% { transform: scale(2.5); opacity: 0; }
+        }
+        .progress-bar-stripes {
+            background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
+            background-size: 1rem 1rem;
+            animation: progress-bar-stripes 1s linear infinite;
+        }
+        @keyframes progress-bar-stripes {
+            from { background-position: 1rem 0; }
+            to { background-position: 0 0; }
+        }
+        .skeleton {
+            background: linear-gradient(90deg, #f2f4f6 25%, #e6e8ea 50%, #f2f4f6 75%);
+            background-size: 200% 100%;
+            animation: skeleton-loading 1.5s infinite;
+        }
+        @keyframes skeleton-loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+      </style>
+</head>
+<body class="bg-background text-on-surface h-full flex overflow-hidden font-body-md text-body-md">
+<!-- TopNavBar (JSON Output translated to Semantic Shell) -->
+<header class="flex justify-between items-center h-16 w-full pl-6 pr-container-margin bg-surface-container-lowest border-b border-surface-variant fixed top-0 z-40">
+<div class="flex items-center gap-inline-sm">
+<span class="material-symbols-outlined text-primary" data-weight="fill" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+<span class="font-title-lg text-title-lg font-bold text-on-surface">RepresentAI</span>
+</div>
+<div class="flex items-center gap-stack-md">
+<div class="bg-surface-container px-3 py-1 rounded-DEFAULT border border-outline-variant font-label-md text-label-md text-on-surface-variant">
+                DEMO ENVIRONMENT
+            </div>
+<div class="flex gap-4">
+<button class="text-outline hover:text-primary transition-colors"><span class="material-symbols-outlined">notifications</span></button>
+<button class="text-outline hover:text-primary transition-colors"><span class="material-symbols-outlined">help_outline</span></button>
+</div>
+<div class="w-8 h-8 rounded-full bg-surface-variant border border-outline-variant flex items-center justify-center overflow-hidden">
+<span class="material-symbols-outlined text-on-surface-variant text-sm">person</span>
+</div>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="flex-1 mt-16 overflow-y-auto px-container-margin py-stack-lg max-w-7xl mx-auto w-full">
+<!-- Header Section -->
+<div class="mb-stack-lg">
+<a class="inline-flex items-center text-on-surface-variant hover:text-primary transition-colors font-label-md text-label-md mb-stack-sm" href="#">
+<span class="material-symbols-outlined text-sm mr-1">arrow_back</span>
+                Back to Disputes
+            </a>
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-surface-variant pb-stack-md">
+<div>
+<h1 class="font-headline-lg text-headline-lg text-on-surface">Dispute DSP-10482</h1>
+<div class="flex flex-wrap gap-4 mt-inline-sm font-label-md text-label-md text-on-surface-variant">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">payments</span>
+<span>Amount: <strong class="text-on-surface">₹48,500</strong></span>
+</div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">info</span>
+<span>Reason: <strong class="text-on-surface">Product not received</strong></span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<div class="bg-error-container text-on-error-container px-3 py-1.5 rounded-DEFAULT font-label-sm text-label-sm flex items-center gap-1 border border-[#ffb4ab]">
+<span class="material-symbols-outlined text-[14px]">error</span>
+                        INVESTIGATION_REQUIRED
+                    </div>
+<div class="bg-surface-container-high text-on-surface px-3 py-1.5 rounded-DEFAULT font-label-sm text-label-sm flex items-center gap-1 border border-outline-variant">
+<span class="material-symbols-outlined text-[14px]">schedule</span>
+                        2d remaining
+                    </div>
+</div>
+</div>
+</div>
+<!-- Two Column Layout -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+<!-- Left Column: Investigation Sync -->
+<div class="lg:col-span-4 flex flex-col gap-stack-md">
+<div class="bg-surface-container-lowest border border-surface-variant rounded-lg p-stack-md">
+<h2 class="font-title-lg text-title-lg text-on-surface mb-stack-md flex items-center gap-2 border-b border-surface-variant pb-2">
+<span class="material-symbols-outlined">sync</span>
+                        Investigation Sync
+                    </h2>
+<div class="relative pl-2 pt-2 pb-4">
+<!-- Step 1: Completed -->
+<div class="relative flex gap-4 mb-6">
+<div class="timeline-line active"></div>
+<div class="w-6 h-6 rounded-full bg-secondary text-on-primary flex flex-shrink-0 items-center justify-center z-10 border-2 border-surface-container-lowest">
+<span class="material-symbols-outlined text-[12px] font-bold">check</span>
+</div>
+<div class="pt-0.5">
+<p class="font-label-md text-label-md text-on-surface">Dispute identified</p>
+</div>
+</div>
+<!-- Step 2: Completed -->
+<div class="relative flex gap-4 mb-6">
+<div class="timeline-line active"></div>
+<div class="w-6 h-6 rounded-full bg-secondary text-on-primary flex flex-shrink-0 items-center justify-center z-10 border-2 border-surface-container-lowest">
+<span class="material-symbols-outlined text-[12px] font-bold">check</span>
+</div>
+<div class="pt-0.5">
+<p class="font-label-md text-label-md text-on-surface">Payment details retrieved</p>
+</div>
+</div>
+<!-- Step 3: Completed -->
+<div class="relative flex gap-4 mb-6">
+<div class="timeline-line active"></div>
+<div class="w-6 h-6 rounded-full bg-secondary text-on-primary flex flex-shrink-0 items-center justify-center z-10 border-2 border-surface-container-lowest">
+<span class="material-symbols-outlined text-[12px] font-bold">check</span>
+</div>
+<div class="pt-0.5">
+<p class="font-label-md text-label-md text-on-surface">Order details retrieved</p>
+</div>
+</div>
+<!-- Step 4: Active/Pulsing -->
+<div class="relative flex gap-4 mb-6">
+<div class="timeline-line"></div>
+<div class="relative flex flex-shrink-0 z-10">
+<div class="absolute inset-0 rounded-full bg-secondary pulse-ring"></div>
+<div class="w-6 h-6 rounded-full bg-surface-container-lowest border-2 border-secondary flex items-center justify-center relative z-10">
+<div class="w-2 h-2 rounded-full bg-secondary"></div>
+</div>
+</div>
+<div class="pt-0.5">
+<p class="font-label-md text-label-md text-on-surface">Shipping records analysis</p>
+<p class="font-body-sm text-body-sm text-secondary mt-1">Querying carrier APIs...</p>
+</div>
+</div>
+<!-- Step 5: Pending -->
+<div class="relative flex gap-4 mb-6">
+<div class="timeline-line"></div>
+<div class="w-6 h-6 rounded-full bg-surface-container border-2 border-outline-variant flex flex-shrink-0 items-center justify-center z-10">
+</div>
+<div class="pt-0.5">
+<p class="font-label-md text-label-md text-on-surface-variant">Customer communications</p>
+</div>
+</div>
+<!-- Step 6: Pending -->
+<div class="relative flex gap-4 mb-6">
+<div class="timeline-line"></div>
+<div class="w-6 h-6 rounded-full bg-surface-container border-2 border-outline-variant flex flex-shrink-0 items-center justify-center z-10">
+</div>
+<div class="pt-0.5">
+<p class="font-label-md text-label-md text-on-surface-variant">Evidence synthesis</p>
+</div>
+</div>
+<!-- Step 7: Pending -->
+<div class="relative flex gap-4">
+<div class="w-6 h-6 rounded-full bg-surface-container border-2 border-outline-variant flex flex-shrink-0 items-center justify-center z-10">
+</div>
+<div class="pt-0.5">
+<p class="font-label-md text-label-md text-on-surface-variant">Deterministic validation</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: Status & Ledger -->
+<div class="lg:col-span-8 flex flex-col gap-stack-md">
+<!-- Deterministic Validation Active Card -->
+<div class="bg-surface-container-lowest border border-secondary rounded-lg p-stack-md relative overflow-hidden shadow-[0_0_15px_rgba(49,107,243,0.1)]">
+<!-- Subtle background glow -->
+<div class="absolute top-0 right-0 w-64 h-64 bg-secondary opacity-5 rounded-full blur-3xl -mr-32 -mt-32 pointer-events-none"></div>
+<div class="flex items-center justify-between mb-stack-sm relative z-10">
+<h3 class="font-title-lg text-title-lg text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary animate-pulse">model_training</span>
+                            Deterministic Validation Active
+                        </h3>
+<span class="font-label-sm text-label-sm bg-secondary-container text-on-primary px-2 py-1 rounded">PROCESSING</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mb-stack-md relative z-10">
+                        RepresentAI is gathering multi-source evidence to reconstruct the transaction state space.
+                    </p>
+<div class="w-full bg-surface-container h-2 rounded-full overflow-hidden relative z-10 border border-surface-variant">
+<div class="h-full bg-secondary progress-bar-stripes w-[55%] rounded-full"></div>
+</div>
+</div>
+<!-- Evidence Ledger Table -->
+<div class="bg-surface-container-lowest border border-surface-variant rounded-lg flex flex-col flex-1 min-h-[400px]">
+<div class="p-stack-md border-b border-surface-variant flex justify-between items-center">
+<h3 class="font-title-lg text-title-lg text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined">receipt_long</span>
+                            Evidence Ledger
+                        </h3>
+<span class="font-label-sm text-label-sm text-on-surface-variant">0 of 4 sources verified</span>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low border-b border-surface-variant font-label-sm text-label-sm text-on-surface-variant uppercase">
+<th class="py-3 px-4 font-medium">Claim</th>
+<th class="py-3 px-4 font-medium">Source</th>
+<th class="py-3 px-4 font-medium">Evidence</th>
+<th class="py-3 px-4 font-medium">Verification</th>
+</tr>
+</thead>
+<tbody>
+<!-- Empty/Loading State -->
+<tr class="border-b border-surface-variant/50">
+<td class="py-4 px-4 align-top">
+<div class="h-4 w-3/4 skeleton rounded mb-2"></div>
+<div class="h-3 w-1/2 skeleton rounded"></div>
+</td>
+<td class="py-4 px-4 align-top">
+<div class="h-4 w-24 skeleton rounded"></div>
+</td>
+<td class="py-4 px-4 align-top">
+<div class="h-10 w-full skeleton rounded"></div>
+</td>
+<td class="py-4 px-4 align-top">
+<div class="h-6 w-20 skeleton rounded-full"></div>
+</td>
+</tr>
+<tr class="border-b border-surface-variant/50">
+<td class="py-4 px-4 align-top">
+<div class="h-4 w-5/6 skeleton rounded mb-2"></div>
+<div class="h-3 w-2/3 skeleton rounded"></div>
+</td>
+<td class="py-4 px-4 align-top">
+<div class="h-4 w-20 skeleton rounded"></div>
+</td>
+<td class="py-4 px-4 align-top">
+<div class="h-10 w-full skeleton rounded"></div>
+</td>
+<td class="py-4 px-4 align-top">
+<div class="h-6 w-20 skeleton rounded-full"></div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="flex-1 flex flex-col items-center justify-center p-stack-lg text-center opacity-70">
+<span class="material-symbols-outlined text-[48px] text-surface-variant mb-2">hourglass_empty</span>
+<p class="font-body-md text-body-md text-on-surface-variant">Awaiting source data validation...</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer Actions -->
+<div class="mt-stack-lg pt-stack-md border-t border-surface-variant flex justify-end gap-stack-sm pb-container-margin">
+<button class="px-6 py-2 border border-outline-variant rounded-DEFAULT font-label-md text-label-md text-on-surface hover:bg-surface-container-low transition-colors">
+                EXPORT
+            </button>
+<button class="px-6 py-2 bg-primary text-on-primary rounded-DEFAULT font-label-md text-label-md flex items-center gap-2 shadow-sm opacity-50 cursor-not-allowed">
+<span class="material-symbols-outlined text-[18px]">search</span>
+                INVESTIGATE
+            </button>
+</div>
+</main>
+</body></html>
