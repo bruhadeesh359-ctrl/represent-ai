@@ -12,7 +12,11 @@ export async function GET(request: Request) {
     if (!error) {
       // The middleware will handle redirecting to onboarding if necessary
       return NextResponse.redirect(`${origin}${next}`)
+    } else {
+      console.error("SUPABASE AUTH ERROR:", error.message, error)
     }
+  } else {
+    console.error("NO CODE IN URL")
   }
 
   // return the user to an error page with instructions
