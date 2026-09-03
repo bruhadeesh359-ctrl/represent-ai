@@ -88,21 +88,21 @@ def submit_to_razorpay(investigation_id: str):
         raise HTTPException(status_code=400, detail="Evidence PDF must be generated before submission")
         
     try:
-        # 1. Upload Document to Razorpay
-        document_id = upload_document(pdf_path)
+        # SIMULATION (Option 1): Bypass Razorpay API for Hackathon Demo
+        # 1. Upload Document to Razorpay (Simulated)
+        document_id = f"doc_simulated_{investigation_id[:8]}"
         
-        # 2. Contest Dispute on Razorpay
-        contest_resp = contest_dispute(
-            dispute_id=dispute.get("razorpay_dispute_id"),
-            amount=dispute.get("amount"),
-            summary=investigation.get("reasoning_summary", "Contesting dispute with evidence attached."),
-            document_ids=[document_id]
-        )
+        # 2. Contest Dispute on Razorpay (Simulated)
+        contest_resp = {
+            "id": f"disp_sim_{investigation_id[:8]}",
+            "status": "under_review",
+            "amount": dispute.get("amount")
+        }
         
         # 3. Audit log
         db.table("audit_logs").insert({
             "investigation_id": investigation_id,
-            "action": "Merchant Approved and Submitted to Live Razorpay API",
+            "action": "Merchant Approved and Submitted to Live Razorpay API (SIMULATED)",
             "details": {"document_id": document_id, "razorpay_response": contest_resp}
         }).execute()
         
