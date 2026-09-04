@@ -139,9 +139,10 @@ export default function Dashboard() {
                 <tr><td colSpan={4} className="py-10 text-center text-[#166534] font-medium">No urgent disputes requiring attention.</td></tr>
               ) : (
                 attentionRequired.map(dispute => {
-                  const hasInvestigation = dispute.investigations && dispute.investigations.length > 0;
-                  const invStatus = hasInvestigation ? dispute.investigations[0].status : null;
-                  const decision = hasInvestigation ? dispute.investigations[0].decision : null;
+                  const inv = getLatestInv(dispute);
+                  const hasInvestigation = !!inv;
+                  const invStatus = inv?.status || null;
+                  const decision = inv?.decision || null;
 
                   return (
                     <tr key={dispute.id} className="border-b border-outline-variant hover:bg-surface-bright transition-colors">
@@ -203,9 +204,10 @@ export default function Dashboard() {
                 <tr><td colSpan={5} className="py-10 text-center text-on-surface-variant">No active disputes found.</td></tr>
               ) : (
                 disputes.map(dispute => {
-                  const hasInvestigation = dispute.investigations && dispute.investigations.length > 0;
-                  const invStatus = hasInvestigation ? dispute.investigations[0].status : null;
-                  const decision = hasInvestigation ? dispute.investigations[0].decision : null;
+                  const inv = getLatestInv(dispute);
+                  const hasInvestigation = !!inv;
+                  const invStatus = inv?.status || null;
+                  const decision = inv?.decision || null;
                   
                   return (
                     <tr key={dispute.id} className="border-b border-outline-variant hover:bg-surface-bright transition-colors group">
