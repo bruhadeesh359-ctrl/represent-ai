@@ -15,34 +15,45 @@ export default function Dashboard() {
       .finally(() => setLoading(false));
   }, []);
 
+  // Helper to get the latest investigation reliably
+  const getLatestInv = (d: any) => {
+    if (!d.investigations || d.investigations.length === 0) return null;
+    return [...d.investigations].sort((a, b) => new Date(b.started_at).getTime() - new Date(a.started_at).getTime())[0];
+  };
+
   // --- Financial Calculations ---
   const totalAmount = disputes.reduce((sum, d) => sum + (d.amount || 0), 0) / 100;
   
-  const amountFight = disputes.filter(d => 
-    d.investigations?.[0]?.status === 'COMPLETED' && d.investigations[0].decision === 'FIGHT'
-  ).reduce((sum, d) => sum + (d.amount || 0), 0) / 100;
+  const amountFight = disputes.filter(d => {
+    const inv = getLatestInv(d);
+    return inv?.status === 'COMPLETED' && inv.decision === 'FIGHT';
+  }).reduce((sum, d) => sum + (d.amount || 0), 0) / 100;
 
-  const amountAccept = disputes.filter(d => 
-    d.investigations?.[0]?.status === 'COMPLETED' && d.investigations[0].decision === 'ACCEPT'
-  ).reduce((sum, d) => sum + (d.amount || 0), 0) / 100;
+  const amountAccept = disputes.filter(d => {
+    const inv = getLatestInv(d);
+    return inv?.status === 'COMPLETED' && inv.decision === 'ACCEPT';
+  }).reduce((sum, d) => sum + (d.amount || 0), 0) / 100;
 
-  const amountReview = disputes.filter(d => 
-    d.investigations?.[0]?.status === 'COMPLETED' && d.investigations[0].decision === 'HUMAN_REVIEW'
-  ).reduce((sum, d) => sum + (d.amount || 0), 0) / 100;
+  const amountReview = disputes.filter(d => {
+    const inv = getLatestInv(d);
+    return inv?.status === 'COMPLETED' && inv.decision === 'HUMAN_REVIEW';
+  }).reduce((sum, d) => sum + (d.amount || 0), 0) / 100;
 
-  const amountPending = disputes.filter(d => 
-    !d.investigations || d.investigations.length === 0 || d.investigations[0]?.status !== 'COMPLETED'
-  ).reduce((sum, d) => sum + (d.amount || 0), 0) / 100;
+  const amountPending = disputes.filter(d => {
+    const inv = getLatestInv(d);
+    return !inv || inv.status !== 'COMPLETED';
+  }).reduce((sum, d) => sum + (d.amount || 0), 0) / 100;
 
   // --- Segregate Disputes ---
-  const attentionRequired = disputes.filter(d => 
-    (!d.investigations || d.investigations.length === 0) || // Needs investigation
-    (d.investigations?.[0]?.status === 'COMPLETED' && d.investigations[0].decision === 'HUMAN_REVIEW') // Needs review
-  ).sort((a, b) => b.amount - a.amount); // Sort by highest amount first
+  const attentionRequired = disputes.filter(d => {
+    const inv = getLatestInv(d);
+    return !inv || (inv.status === 'COMPLETED' && inv.decision === 'HUMAN_REVIEW');
+  }).sort((a, b) => b.amount - a.amount);
 
-  const completedDisputes = disputes.filter(d => 
-    d.investigations?.[0]?.status === 'COMPLETED' && d.investigations[0].decision !== 'HUMAN_REVIEW'
-  );
+  const completedDisputes = disputes.filter(d => {
+    const inv = getLatestInv(d);
+    return inv?.status === 'COMPLETED' && inv.decision !== 'HUMAN_REVIEW';
+  });
 
   return (
     <div className="w-full max-w-7xl mx-auto space-y-stack-xl">
