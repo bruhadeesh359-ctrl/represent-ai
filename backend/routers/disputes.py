@@ -10,7 +10,7 @@ def get_all_disputes() -> List[Dict[str, Any]]:
     if not db:
         raise HTTPException(status_code=500, detail="Database not configured")
     # Fetch disputes ordered by created_at desc
-    response = db.table("disputes").select("*, investigations(status)").order("created_at", desc=True).execute()
+    response = db.table("disputes").select("*, investigations(*)").order("created_at", desc=True).execute()
     return response.data
 
 @router.get("/{dispute_id}")
