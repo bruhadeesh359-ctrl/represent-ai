@@ -85,7 +85,12 @@ def submit_to_razorpay(investigation_id: str):
         
     pdf_path = f"generated_pdfs/{investigation_id}.pdf"
     if not os.path.exists(pdf_path):
-        raise HTTPException(status_code=400, detail="Evidence PDF must be generated before submission")
+        # Auto-generate it if the user skipped the preview step
+        os.makedirs("generated_pdfs", exist_ok=True)
+        # Fetch evidence
+        ev_resp = db.table("evidence").select("*").eq("investigation_id", investigation_id).execute()
+        from services.pdf_generator import generate_dispute_response_pdf
+        generate_dispute_response_pdf(investigation, ev_resp.data, dispute, pdf_path)
         
     try:
         # SIMULATION (Option 1): Bypass Razorpay API for Hackathon Demo
